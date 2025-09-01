@@ -1,3 +1,43 @@
+
+
+## Estructura
+
+```text
+/crm-dashboard
+├── public/
+└── src/
+    ├── api/
+    │   └── client.js         # Cliente Axios configurado
+    ├── components/
+    │   ├── common/           # Botones, inputs, etc. reutilizables
+    │   ├── layout/
+    │   │   └── MainLayout.js # Layout principal con Navbar y Sidebar
+    │   └── dashboard/
+    │       ├── KpiCard.js
+    │       └── MessageTable.js
+    ├── contexts/
+    │   └── AuthContext.js    # Contexto para gestionar el estado de autenticación
+    ├── hooks/
+    │   └── useAuth.js        # Hook para consumir el AuthContext fácilmente
+    ├── pages/
+    │   ├── DashboardPage.js
+    │   ├── LoginPage.js
+    │   └── NotFoundPage.js
+    ├── routes/
+    │   ├── AppRouter.js      # Define todas las rutas de la aplicación
+    │   └── ProtectedRoute.js # Protege rutas que requieren login
+    ├── styles/
+    │   └── theme.js          # Tema global de Material-UI
+    └── App.js                # Componente raíz
+
+```
+
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
