@@ -1,129 +1,104 @@
+# Ifes Chatbot Moodle CRM - Frontend
 
+This is the frontend for the Ifes Chatbot Moodle CRM project. It is a React application that provides the user interface for interacting with the backend API.
 
-## GIT
+## Tech Stack
 
-…or create a new repository on the command line
-```text
-echo "# ifes_fe_bot_whatsapp_crm" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/zeron-team/ifes_fe_bot_whatsapp_crm.git
-git push -u origin main
+- **Framework:** React
+- **UI Library:** Material-UI (inferred from `styles/theme.js`)
+- **Routing:** React Router
+- **API Client:** Axios (inferred from `api/client.js`)
+
+## Prerequisites
+
+- Node.js
+- npm
+
+## Installation
+
+1. **Navigate to the frontend directory:**
+   ```bash
+   cd Ifes_chatbot_moodle_crm/frontend
+   ```
+
+2. **Install the dependencies:**
+   ```bash
+   npm install
+   ```
+
+## Running the Application
+
+To run the development server, use the following command:
+```bash
+npm start
 ```
-…or push an existing repository from the command line
-```text
-git remote add origin https://github.com/zeron-team/ifes_fe_bot_whatsapp_crm.git
-git branch -M main
-git push -u origin main
-```
-
-## Estructura
-
-```text
-/crm-dashboard
-├── public/
-└── src/
-    ├── api/
-    │   └── client.js         # Cliente Axios configurado
-    ├── components/
-    │   ├── common/           # Botones, inputs, etc. reutilizables
-    │   ├── layout/
-    │   │   └── MainLayout.js # Layout principal con Navbar y Sidebar
-    │   └── dashboard/
-    │       ├── KpiCard.js
-    │       └── MessageTable.js
-    ├── contexts/
-    │   └── AuthContext.js    # Contexto para gestionar el estado de autenticación
-    ├── hooks/
-    │   └── useAuth.js        # Hook para consumir el AuthContext fácilmente
-    ├── pages/
-    │   ├── DashboardPage.js
-    │   ├── LoginPage.js
-    │   └── NotFoundPage.js
-    ├── routes/
-    │   ├── AppRouter.js      # Define todas las rutas de la aplicación
-    │   └── ProtectedRoute.js # Protege rutas que requieren login
-    ├── styles/
-    │   └── theme.js          # Tema global de Material-UI
-    └── App.js                # Componente raíz
-
-```
-
-
-
-
-
-
-
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The application will be available at `http://localhost:3000`.
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+- `npm start`: Runs the app in the development mode.
+- `npm test`: Launches the test runner in the interactive watch mode.
+- `npm run build`: Builds the app for production to the `build` folder.
+- `npm run eject`: Removes the single dependency and copies all the configuration files and transitive dependencies (webpack, Babel, ESLint, etc.) right into your project so you have full control over them.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Project Structure
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+/frontend
+├── public/
+│   └── index.html              # The page template
+├── src/
+│   ├── App.js                  # Main application component
+│   ├── index.js                # The entry point of the application
+│   ├── api/
+│   │   └── client.js           # Axios client setup
+│   ├── components/
+│   │   ├── crm/
+│   │   │   ├── ConversationView.js
+│   │   │   └── StudentList.js
+│   │   ├── dashboard/
+│   │   │   ├── CrmActionsChart.js
+│   │   │   ├── KpiCard.js
+│   │   │   ├── KpiGrid.js
+│   │   │   ├── MessageTable.js
+│   │   │   └── TimelineChart.js
+│   │   ├── flows/
+│   │   │   ├── FlowDiagram.js
+│   │   │   ├── FlowEditor.js
+│   │   │   ├── FlowForm.js
+│   │   │   ├── FlowList.js
+│   │   │   └── nodes/
+│   │   │       └── MessageNode.js
+│   │   ├── layout/
+│   │   │   └── MainLayout.js
+│   │   ├── Login.js
+│   │   ├── MessageList.js
+│   │   ├── ProtectedRoute.js
+│   │   └── UserManagement.js
+│   ├── contexts/
+│   │   └── AuthContext.js      # Authentication context for the app
+│   ├── hooks/
+│   │   └── useAuth.js          # Custom hook for authentication
+│   ├── pages/
+│   │   ├── CoursesPage.js
+│   │   ├── CrmPage.js
+│   │   ├── DashboardPage.js
+│   │   ├── FlowsPage.js
+│   │   ├── InteractionsPage.js
+│   │   ├── LoginPage.js
+│   │   ├── NotFoundPage.js
+│   │   └── UserManagementPage.js
+│   ├── routes/
+│   │   ├── AppRouter.js        # Main application router
+│   │   └── ProtectedRoute.js   # Route guard for authenticated routes
+│   ├── services/
+│   │   ├── api.js              # Generic API service
+│   │   ├── flowApi.js          # Flow-specific API service
+│   │   └── userApi.js          # User-specific API service
+│   └── styles/
+│       └── theme.js            # Material-UI theme configuration
+├── package.json
+└── ...
+```

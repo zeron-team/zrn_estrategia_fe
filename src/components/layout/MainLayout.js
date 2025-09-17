@@ -8,6 +8,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import SchoolIcon from '@mui/icons-material/School';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import PeopleIcon from '@mui/icons-material/People';
 
 const drawerWidth = 240;
 
@@ -22,9 +24,12 @@ const MainLayout = ({ children }) => {
 
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-      { text: 'Interacciones', icon: <MessageIcon />, path: '/interactions' },
-   // { text: 'Mensajes', icon: <MessageIcon />, path: '/messages' },
-      { text: 'Cursos', icon: <SchoolIcon />, path: '/courses' },
+    // Removed { text: 'Mensajes', icon: <MessageIcon />, path: '/messages' },
+    { text: 'CRM', icon: <PeopleIcon />, path: '/messages' }, // Changed path to /messages
+    { text: 'Cursos', icon: <SchoolIcon />, path: '/courses' },
+    { text: 'Flows', icon: <AccountTreeIcon />, path: '/flows' },
+    { text: 'Usuarios', icon: <PeopleIcon />, path: '/users' },
+    // Removed { text: 'Interactions', icon: <PeopleIcon />, path: '/interactions' },
     // Puedes añadir más items aquí (ej. /users, /settings)
   ];
 
@@ -76,7 +81,7 @@ const MainLayout = ({ children }) => {
       </Drawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        sx={{ flexGrow: 1, bgcolor: 'background.default' }} // Removed p: 3
       >
         <Toolbar />
         {children}

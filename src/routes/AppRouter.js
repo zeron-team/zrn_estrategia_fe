@@ -1,13 +1,13 @@
-// routes/AppRouter.js
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '../pages/LoginPage';
 import DashboardPage from '../pages/DashboardPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import ProtectedRoute from './ProtectedRoute';
-import InteractionsPage from '../pages/InteractionsPage';
 import CoursesPage from '../pages/CoursesPage';
+import FlowsPage from '../pages/FlowsPage';
+import CrmPage from '../pages/CrmPage';
+import UserManagementPage from '../pages/UserManagementPage';
 
 const AppRouter = () => {
   return (
@@ -18,9 +18,10 @@ const AppRouter = () => {
         {/* Rutas Protegidas */}
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/interactions" element={<InteractionsPage />} />
+          <Route path="/messages" element={<CrmPage />} />
           <Route path="/courses" element={<CoursesPage />} />
-          {/* Aquí podrías añadir más rutas protegidas, ej: /users, /settings */}
+          <Route path="/flows" element={<FlowsPage />} />
+          <Route path="/users" element={<UserManagementPage />} />
         </Route>
 
         <Route path="/" element={<Navigate to="/dashboard" />} />
