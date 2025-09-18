@@ -17,7 +17,7 @@ import ForumIcon from '@mui/icons-material/Forum';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
-import MainLayout from '../components/layout/MainLayout';
+// import MainLayout from '../components/layout/MainLayout'; // Removed MainLayout import
 import KpiCard from '../components/dashboard/KpiCard';
 import TimelineChart from '../components/dashboard/TimelineChart';
 import CrmActionsChart from '../components/dashboard/CrmActionsChart';
@@ -118,35 +118,31 @@ const DashboardPage = () => {
 
   if (loading) {
     return (
-      <MainLayout>
-        <Box sx={{ display: 'grid', placeItems: 'center', height: '70vh' }}>
-          <Box sx={{ display: 'grid', gap: 8, justifyItems: 'center' }}>
-            <CircularProgress />
-            <Typography variant="body2" color="text.secondary">Cargando dashboard…</Typography>
-          </Box>
+      <Box sx={{ display: 'grid', placeItems: 'center', height: '70vh' }}>
+        <Box sx={{ display: 'grid', gap: 8, justifyItems: 'center' }}>
+          <CircularProgress />
+          <Typography variant="body2" color="text.secondary">Cargando dashboard…</Typography>
         </Box>
-      </MainLayout>
+      </Box>
     );
   }
 
   if (error) {
     return (
-      <MainLayout>
-        <Container maxWidth={false} disableGutters>
-          <Box sx={{ p: 2 }}>
-            <Alert
-              severity="error"
-              action={
-                <IconButton aria-label="recargar" color="inherit" size="small" onClick={loadData}>
-                  <RefreshIcon fontSize="inherit" />
-                </IconButton>
-              }
-            >
-              {error}
-            </Alert>
-          </Box>
-        </Container>
-      </MainLayout>
+      <Container maxWidth={false} disableGutters>
+        <Box sx={{ p: 2 }}>
+          <Alert
+            severity="error"
+            action={
+              <IconButton aria-label="recargar" color="inherit" size="small" onClick={loadData}>
+                <RefreshIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {error}
+          </Alert>
+        </Box>
+      </Container>
     );
   }
 
@@ -155,145 +151,143 @@ const DashboardPage = () => {
   const colSpanChart = { xs: 'span 12', lg: 'span 6' };              // 2 col en lg+
 
   return (
-    <MainLayout>
-      {/* Cinta de fondo para realzar el frame */}
-      <Box
-        sx={{
-          py: { xs: 2, md: 4 },
-          px: { xs: 2, md: 3 },
-          background:
-            theme.palette.mode === 'light'
-              ? `linear-gradient(180deg, ${theme.palette.background.default} 0%, ${theme.palette.background.paper} 100%)`
-              : `linear-gradient(180deg, ${theme.palette.background.default} 0%, ${theme.palette.background.default} 100%)`,
-        }}
-      >
-        {/* FRAME profesional centrado */}
-        <Box sx={{ maxWidth: MAX_FRAME_WIDTH, mx: 'auto' }}>
-          <Paper
-            elevation={0}
+    // Removed MainLayout wrapper
+    <Box
+      sx={{
+        py: { xs: 2, md: 4 },
+        px: { xs: 2, md: 3 },
+        background:
+          theme.palette.mode === 'light'
+            ? `linear-gradient(180deg, ${theme.palette.background.default} 0%, ${theme.palette.background.paper} 100%)`
+            : `linear-gradient(180deg, ${theme.palette.background.default} 0%, ${theme.palette.background.default} 100%)`,
+      }}
+    >
+      {/* FRAME profesional centrado */}
+      <Box sx={{ maxWidth: MAX_FRAME_WIDTH, mx: 'auto' }}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 2, md: 3.5 },
+            borderRadius: 3,
+            border: '1px solid',
+            borderColor: 'divider',
+            boxShadow:
+              theme.palette.mode === 'light'
+                ? '0 6px 24px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)'
+                : '0 10px 30px rgba(0,0,0,0.35)',
+            backgroundColor: theme.palette.background.paper,
+          }}
+        >
+          {/* Header del frame */}
+          <Box
             sx={{
-              p: { xs: 2, md: 3.5 },
-              borderRadius: 3,
-              border: '1px solid',
-              borderColor: 'divider',
-              boxShadow:
-                theme.palette.mode === 'light'
-                  ? '0 6px 24px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)'
-                  : '0 10px 30px rgba(0,0,0,0.35)',
-              backgroundColor: theme.palette.background.paper,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              mb: 3,
             }}
           >
-            {/* Header del frame */}
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                mb: 3,
-              }}
-            >
-              <Box>
-                <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1 }}>
-                  Panel
-                </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
-                  Dashboard de Interacciones
-                </Typography>
+            <Box>
+              <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1 }}>
+                Panel
+              </Typography>
+              <Typography variant="h4" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                Dashboard de CRM
+              </Typography>
+            </Box>
+            <IconButton aria-label="recargar" onClick={loadData} size="large">
+              <RefreshIcon />
+            </IconButton>
+          </Box>
+
+          {/* GRID dentro del frame (12 columnas) */}
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(12, minmax(0, 1fr))',
+              gap: `${GAP}px`,
+            }}
+          >
+            {/* Línea 1: 3 KPIs */}
+              {studentKpis.map((kpi) => (
+              <Box key={kpi.key} sx={{ gridColumn: colSpanKPI, minWidth: 0 }}>
+                  <Box sx={{ height: KPI_CARD_HEIGHT, width: '100%' }}>
+                  <KpiCard
+                      title={kpi.title}
+                      value={kpi.value}
+                      icon={kpi.icon}
+                      color={kpi.color}
+                      sx={{ height: '100%' }}        // <- KPI llena el alto del contenedor
+                  />
+                  </Box>
               </Box>
-              <IconButton aria-label="recargar" onClick={loadData} size="large">
-                <RefreshIcon />
-              </IconButton>
+              ))}
+
+            {/* Línea 2: 3 KPIs */}
+              {messageKpiData.map((kpi) => (
+              <Box key={kpi.key} sx={{ gridColumn: colSpanKPI, minWidth: 0 }}>
+                  <Box sx={{ height: KPI_CARD_HEIGHT, width: '100%' }}>
+                  <KpiCard
+                      title={kpi.title}
+                      value={kpi.value}
+                      icon={kpi.icon}
+                      color={kpi.color}
+                      sx={{ height: '100%' }}
+                  />
+                  </Box>
+              </Box>
+              ))}
+
+            {/* Línea 3: 2 charts (50/50 del frame) */}
+            <Box sx={{ gridColumn: colSpanChart, minWidth: 0 }}>
+              <Paper
+                elevation={1}
+                sx={{
+                  p: 2.5,
+                  borderRadius: 2,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  height: CHART_CARD_HEIGHT,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '100%',
+                }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                  Mensajes por día
+                </Typography>
+                <Box sx={{ flex: 1, minHeight: 0, width: '100%' }}>
+                  <TimelineChart data={timelineData} color={theme.palette.primary.main} />
+                </Box>
+              </Paper>
             </Box>
 
-            {/* GRID dentro del frame (12 columnas) */}
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(12, minmax(0, 1fr))',
-                gap: `${GAP}px`,
-              }}
-            >
-              {/* Línea 1: 3 KPIs */}
-                {studentKpis.map((kpi) => (
-                <Box key={kpi.key} sx={{ gridColumn: colSpanKPI, minWidth: 0 }}>
-                    <Box sx={{ height: KPI_CARD_HEIGHT, width: '100%' }}>
-                    <KpiCard
-                        title={kpi.title}
-                        value={kpi.value}
-                        icon={kpi.icon}
-                        color={kpi.color}
-                        sx={{ height: '100%' }}        // <- KPI llena el alto del contenedor
-                    />
-                    </Box>
+            <Box sx={{ gridColumn: colSpanChart, minWidth: 0 }}>
+              <Paper
+                elevation={1}
+                sx={{
+                  p: 2.5,
+                  borderRadius: 2,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  height: CHART_CARD_HEIGHT,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '100%',
+                }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                  Acciones CRM
+                </Typography>
+                <Box sx={{ flex: 1, minHeight: 0, width: '100%' }}>
+                  <CrmActionsChart data={crmDataset} />
                 </Box>
-                ))}
-
-              {/* Línea 2: 3 KPIs */}
-                {messageKpiData.map((kpi) => (
-                <Box key={kpi.key} sx={{ gridColumn: colSpanKPI, minWidth: 0 }}>
-                    <Box sx={{ height: KPI_CARD_HEIGHT, width: '100%' }}>
-                    <KpiCard
-                        title={kpi.title}
-                        value={kpi.value}
-                        icon={kpi.icon}
-                        color={kpi.color}
-                        sx={{ height: '100%' }}
-                    />
-                    </Box>
-                </Box>
-                ))}
-
-              {/* Línea 3: 2 charts (50/50 del frame) */}
-              <Box sx={{ gridColumn: colSpanChart, minWidth: 0 }}>
-                <Paper
-                  elevation={1}
-                  sx={{
-                    p: 2.5,
-                    borderRadius: 2,
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    height: CHART_CARD_HEIGHT,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    width: '100%',
-                  }}
-                >
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                    Mensajes por día
-                  </Typography>
-                  <Box sx={{ flex: 1, minHeight: 0, width: '100%' }}>
-                    <TimelineChart data={timelineData} color={theme.palette.primary.main} />
-                  </Box>
-                </Paper>
-              </Box>
-
-              <Box sx={{ gridColumn: colSpanChart, minWidth: 0 }}>
-                <Paper
-                  elevation={1}
-                  sx={{
-                    p: 2.5,
-                    borderRadius: 2,
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    height: CHART_CARD_HEIGHT,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    width: '100%',
-                  }}
-                >
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                    Acciones CRM
-                  </Typography>
-                  <Box sx={{ flex: 1, minHeight: 0, width: '100%' }}>
-                    <CrmActionsChart data={crmDataset} />
-                  </Box>
-                </Paper>
-              </Box>
+              </Paper>
             </Box>
-          </Paper>
-        </Box>
+          </Box>
+        </Paper>
       </Box>
-    </MainLayout>
+    </Box>
   );
 };
 

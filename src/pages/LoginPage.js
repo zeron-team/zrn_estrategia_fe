@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Container, TextField, Typography, Paper, Alert } from '@mui/material';
+import logo from '../assets/img/Z_logo_vertical.png'; // Import the logo
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -17,7 +18,7 @@ const LoginPage = () => {
     setError('');
     try {
       await auth.login(username, password);
-      navigate('/dashboard');
+      navigate('/dashboard/select'); // Changed from '/dashboard' to '/dashboard/select'
     } catch (err) {
       setError('Credenciales incorrectas. Por favor, intente de nuevo.');
     }
@@ -26,6 +27,9 @@ const LoginPage = () => {
   return (
     <Container component="main" maxWidth="xs">
       <Paper elevation={6} sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box sx={{ mb: 2 }}>
+          <img src={logo} alt="Company Logo" style={{ maxWidth: '150px', height: 'auto' }} />
+        </Box>
         <Typography component="h1" variant="h5">
           CRM Chatbot - Moodle
         </Typography>

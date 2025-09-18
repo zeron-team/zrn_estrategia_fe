@@ -1,19 +1,23 @@
-// routes/ProtectedRoute.js
-
+// src/router/ProtectedRoute.js
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
+import { Box, CircularProgress } from '@mui/material';
 import { useAuth } from '../hooks/useAuth';
 
-const ProtectedRoute = () => {
-  const { user } = useAuth();
+export default function ProtectedRoute() {
+  const { user, loading } = useAuth(); // your hook should expose these
 
-  if (!user) {
-    // Si no hay usuario, redirigir a la página de login
-    return <Navigate to="/login" />;
+  if (loading) {
+    return (
+      <Box sx={{ display: 'grid', placeItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
-  // Si hay usuario, renderizar el contenido de la ruta (Dashboard, etc.)
-  return <Outlet />;
-};
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
-export default ProtectedRoute;
+  return <Outlet />;
+}

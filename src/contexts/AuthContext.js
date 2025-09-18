@@ -2,6 +2,7 @@
 
 import React, { createContext, useState, useEffect } from 'react';
 import apiClient from '../api/client';
+import { getMe } from '../services/userApi'; // Import getMe
 
 export const AuthContext = createContext(null);
 
@@ -10,16 +11,27 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Al cargar la app, intenta recuperar el token para mantener la sesión
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      setUser({ isAuthenticated: true }); // En una app real, validarías el token aquí
-    }
-    setLoading(false);
+    const checkAuth = async () => {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        try {
+          // Validate token and fetch user data
+          const userResponse = await getMe();
+          setUser({ isAuthenticated: true, ...userResponse.data });
+        } catch (error) {
+          console.error("Failed to fetch user data with existing token:", error);
+          localStorage.removeItem('authToken');
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    };
+    checkAuth();
   }, []);
 
   const login = async (username, password) => {
-    // FastAPI espera los datos de login en un formato de formulario
     const formData = new URLSearchParams();
     formData.append('username', username);
     formData.append('password', password);
@@ -30,7 +42,10 @@ export const AuthProvider = ({ children }) => {
 
     const { access_token } = response.data;
     localStorage.setItem('authToken', access_token);
-    setUser({ isAuthenticated: true });
+    
+    // Fetch user details after successful login
+    const userResponse = await getMe();
+    setUser({ isAuthenticated: true, ...userResponse.data });
   };
 
   const logout = () => {

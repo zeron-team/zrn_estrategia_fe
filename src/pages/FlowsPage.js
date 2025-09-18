@@ -1,4 +1,3 @@
-// src/pages/FlowsPage.js
 import React, { useEffect, useState } from 'react';
 import {
   Box,
@@ -19,12 +18,12 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { getFlows, createFlow, updateFlow, deleteFlow, setActiveFlow } from '../services/flowApi';
-import MainLayout from '../components/layout/MainLayout';
+
 import FlowList from '../components/flows/FlowList';
 import FlowEditor from '../components/flows/FlowEditor';
 import FlowDiagram from '../components/flows/FlowDiagram';
 
-const MAX_FRAME_WIDTH = 1440; // ancho máximo del frame (coherente con el resto)
+const MAX_FRAME_WIDTH = 1440;
 const GAP = 16;
 
 const FlowsPage = () => {
@@ -108,7 +107,6 @@ const FlowsPage = () => {
   const handleViewDiagram = (flow) => setViewingFlow(flow);
   const handleCloseDiagram = () => setViewingFlow(null);
 
-  // Skeleton para lista de flows
   const ListSkeleton = () => (
     <Paper
       elevation={0}
@@ -135,161 +133,156 @@ const FlowsPage = () => {
   );
 
   return (
-    <MainLayout>
-      {/* Cinta de fondo coherente con el resto de páginas */}
-      <Box
-        sx={{
-          py: { xs: 2, md: 4 },
-          px: { xs: 2, md: 3 },
-          background:
-            theme.palette.mode === 'light'
-              ? `linear-gradient(180deg, ${theme.palette.background.default} 0%, ${theme.palette.background.paper} 100%)`
-              : theme.palette.background.default,
-        }}
-      >
-        {/* FRAME profesional centrado */}
-        <Box sx={{ maxWidth: MAX_FRAME_WIDTH, mx: 'auto' }}>
-          <Paper
-            elevation={0}
+    <Box
+      sx={{
+        flexGrow: 1,
+        py: { xs: 2, md: 3 },
+        px: { xs: 2, md: 3 },
+        background:
+          theme.palette.mode === 'light'
+            ? `linear-gradient(180deg, ${theme.palette.background.default} 0%, ${theme.palette.background.paper} 100%)`
+            : theme.palette.background.default,
+      }}
+    >
+      <Box sx={{ maxWidth: MAX_FRAME_WIDTH, mx: 'auto' }}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 2, md: 3.5 },
+            borderRadius: 3,
+            border: '1px solid',
+            borderColor: 'divider',
+            boxShadow:
+              theme.palette.mode === 'light'
+                ? '0 6px 24px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)'
+                : '0 10px 30px rgba(0,0,0,0.35)',
+            backgroundColor: theme.palette.background.paper,
+          }}
+        >
+          {/* Header */}
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3, minWidth: 0 }}>
+            <Box sx={{ minWidth: 0 }}>
+              <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1 }}>
+                Flujos
+              </Typography>
+              <Typography variant="h4" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                Flujos de Conversación
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Button
+                startIcon={<RefreshIcon />}
+                onClick={loadFlows}
+                variant="outlined"
+              >
+                Recargar
+              </Button>
+              <Button variant="contained" startIcon={<AddIcon />} onClick={handleCreate}>
+                Crear Nuevo Flujo
+              </Button>
+            </Box>
+          </Box>
+
+          {error && (
+            <Box sx={{ mb: 2 }}>
+              <Alert severity="error" onClose={() => setError(null)}>
+                {error}
+              </Alert>
+            </Box>
+          )}
+
+          {/* Content */}
+          <Box
             sx={{
-              p: { xs: 2, md: 3.5 },
-              borderRadius: 3,
-              border: '1px solid',
-              borderColor: 'divider',
-              boxShadow:
-                theme.palette.mode === 'light'
-                  ? '0 6px 24px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)'
-                  : '0 10px 30px rgba(0,0,0,0.35)',
-              backgroundColor: theme.palette.background.paper,
+              display: 'grid',
+              gridTemplateColumns: '1fr',
+              gap: `${GAP}px`,
+              alignItems: 'stretch',
+              minWidth: 0,
             }}
           >
-            {/* Header del frame */}
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3, minWidth: 0 }}>
-              <Box sx={{ minWidth: 0 }}>
-                <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1 }}>
-                  Flujos
+            {isFormOpen ? (
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  overflow: 'hidden',
+                }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                  {editingFlow ? 'Editar Flujo' : 'Crear Flujo'}
                 </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
-                  Flujos de Conversación
+                <FlowEditor
+                  flow={editingFlow}
+                  onSave={handleSave}
+                  onCancel={() => {
+                    setIsFormOpen(false);
+                    setEditingFlow(null);
+                  }}
+                  saving={saving}
+                />
+              </Paper>
+            ) : loading ? (
+              <ListSkeleton />
+            ) : flows.length === 0 ? (
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 4,
+                  borderRadius: 2,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  textAlign: 'center',
+                }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                  No se encontraron flujos
                 </Typography>
-              </Box>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <IconButton aria-label="refresh" onClick={loadFlows} size="large">
-                  <RefreshIcon />
-                </IconButton>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Crea tu primer flujo para empezar a automatizar conversaciones.
+                </Typography>
                 <Button variant="contained" startIcon={<AddIcon />} onClick={handleCreate}>
                   Crear Nuevo Flujo
                 </Button>
-              </Box>
-            </Box>
-
-            {/* Mensaje de error si corresponde */}
-            {error && (
-              <Box sx={{ mb: 2 }}>
-                <Alert severity="error" onClose={() => setError(null)}>
-                  {error}
-                </Alert>
-              </Box>
+              </Paper>
+            ) : (
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  overflow: 'hidden',
+                  minWidth: 0,
+                }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                  Flujos
+                </Typography>
+                <FlowList
+                  flows={flows}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                  onViewDiagram={handleViewDiagram}
+                  onSetActive={handleSetActive}
+                />
+              </Paper>
             )}
-
-            {/* Contenido dentro del frame */}
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: '1fr',
-                gap: `${GAP}px`,
-                alignItems: 'stretch',
-                minWidth: 0,
-              }}
-            >
-              {/* Editor o Lista, siempre dentro de una card con borde */}
-              {isFormOpen ? (
-                <Paper
-                  elevation={0}
-                  sx={{
-                    p: 2,
-                    borderRadius: 2,
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                    {editingFlow ? 'Editar Flujo' : 'Crear Flujo'}
-                  </Typography>
-                  <FlowEditor
-                    flow={editingFlow}
-                    onSave={handleSave}
-                    onCancel={() => {
-                      setIsFormOpen(false);
-                      setEditingFlow(null);
-                    }}
-                    saving={saving}
-                  />
-                </Paper>
-              ) : loading ? (
-                <ListSkeleton />
-              ) : flows.length === 0 ? (
-                <Paper
-                  elevation={0}
-                  sx={{
-                    p: 4,
-                    borderRadius: 2,
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    textAlign: 'center',
-                  }}
-                >
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-                    No se encontraron flujos
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    Crea tu primer flujo para empezar a automatizar conversaciones.
-                  </Typography>
-                  <Button variant="contained" startIcon={<AddIcon />} onClick={handleCreate}>
-                    Crear Nuevo Flujo
-                  </Button>
-                </Paper>
-              ) : (
-                <Paper
-                  elevation={0}
-                  sx={{
-                    p: 2,
-                    borderRadius: 2,
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    overflow: 'hidden',
-                    minWidth: 0,
-                  }}
-                >
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                    Flujos
-                  </Typography>
-                  <FlowList
-                    flows={flows}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    onViewDiagram={handleViewDiagram}
-                    onSetActive={handleSetActive}
-                  />
-                </Paper>
-              )}
-            </Box>
-          </Paper>
-        </Box>
+          </Box>
+        </Paper>
       </Box>
 
-      {/* Diagram dialog: look & feel pro, tamaño controlado dentro del frame visual */}
+      {/* Diagram dialog */}
       <Dialog
         open={!!viewingFlow}
         onClose={handleCloseDiagram}
         fullWidth
         maxWidth="xl"
-        PaperProps={{
-          sx: {
-            borderRadius: 3,
-          },
-        }}
+        PaperProps={{ sx: { borderRadius: 3 } }}
       >
         <DialogTitle
           sx={{
@@ -319,7 +312,7 @@ const FlowsPage = () => {
           <Button onClick={handleCloseDiagram}>Cerrar</Button>
         </DialogActions>
       </Dialog>
-    </MainLayout>
+    </Box>
   );
 };
 
