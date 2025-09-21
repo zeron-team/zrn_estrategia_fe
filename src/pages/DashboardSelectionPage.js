@@ -16,6 +16,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import PieChartIcon from '@mui/icons-material/PieChart';
+import SchoolIcon from '@mui/icons-material/School';
 
 const MAX_FRAME_WIDTH = 1440;
 
@@ -28,24 +29,24 @@ const dashboardCards = [
     color: 'primary',
   },
   {
-    title: 'Dashboard de Ventas',
-    description: 'Análisis de rendimiento de ventas y embudos.',
+    title: 'Análisis de Notas',
+    description: 'KPIs, gráficos de torta y barras de notas.',
     icon: <BarChartIcon />,
-    path: '/dashboard/sales',
+    path: '/notes?tab=analytics',
     color: 'success',
   },
   {
-    title: 'Dashboard de Marketing',
-    description: 'Métricas de campañas y engagement de usuarios.',
+    title: 'Dashboard Predictivo',
+    description: 'Análisis Predictivo, Riesgo por Curso',
     icon: <TrendingUpIcon />,
-    path: '/dashboard/marketing',
+    path: '/dashboard/predictive',
     color: 'warning',
   },
   {
-    title: 'Dashboard de Soporte',
-    description: 'Rendimiento del equipo de soporte y tickets.',
+    title: 'Dashboard de Moodle 3',
+    description: 'Análisis de Moodle 3',
     icon: <PieChartIcon />,
-    path: '/dashboard/support',
+    path: '/courses',
     color: 'info',
   },
 ];

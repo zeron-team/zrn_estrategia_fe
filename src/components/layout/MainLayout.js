@@ -58,7 +58,6 @@ const MainLayout = () => {
     () => [
       { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard/select' },
       { text: 'CRM', icon: <PeopleIcon />, path: '/messages' },
-      { text: 'Cursos', icon: <SchoolIcon />, path: '/courses' },
       { text: 'Flows', icon: <AccountTreeIcon />, path: '/flows' },
       { text: 'Usuarios', icon: <PeopleIcon />, path: '/users' },
     ],

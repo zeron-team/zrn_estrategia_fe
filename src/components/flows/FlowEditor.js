@@ -83,7 +83,7 @@ const FlowEditor = ({ flow, onSave, onCancel }) => {
     }
   }, [flow, setNodes, setEdges]);
 
-  const onNodeDataChange = (nodeId, newData) => {
+  const onNodeDataChange = useCallback((nodeId, newData) => {
     setNodes((nds) =>
       nds.map((node) => {
         if (node.id === nodeId) {
@@ -98,7 +98,7 @@ const FlowEditor = ({ flow, onSave, onCancel }) => {
         return node;
       })
     );
-  };
+  }, [setNodes]);
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),

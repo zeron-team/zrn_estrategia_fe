@@ -1,11 +1,13 @@
-// src/router/ProtectedRoute.js
+//src/routes/ProtectedRoute.js
+
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { Box, CircularProgress } from '@mui/material';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function ProtectedRoute() {
-  const { user, loading } = useAuth(); // your hook should expose these
+  const location = useLocation();
+  const { user, loading, isAuthenticated } = useAuth();
 
   if (loading) {
     return (
@@ -15,8 +17,8 @@ export default function ProtectedRoute() {
     );
   }
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   return <Outlet />;

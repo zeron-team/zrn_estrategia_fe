@@ -1,104 +1,296 @@
+// src/components/AppInfoModal.jsx
 import React, { useState } from 'react';
-import { Modal, Box, Typography, IconButton, Tabs, Tab, AppBar } from '@mui/material';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Tabs,
+  Tab,
+  Box,
+  Typography,
+  Divider,
+  Button,
+  Chip,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Alert,
+  IconButton,
+  useTheme,
+} from '@mui/material';
+
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
+import FunctionsOutlinedIcon from '@mui/icons-material/FunctionsOutlined';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import CloseIcon from '@mui/icons-material/Close';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: { xs: '90%', md: '70%', lg: '50%' },
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  borderRadius: 2,
-  p: 4,
-  maxHeight: '90vh',
-  overflowY: 'auto',
-  display: 'flex',
-  flexDirection: 'column',
-};
+function TabPanel({ value, index, children }) {
+  if (value !== index) return null;
+  return <Box sx={{ mt: 2 }}>{children}</Box>;
+}
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+export default function AppInfoModal({ open, onClose }) {
+  const theme = useTheme();
+  const [tab, setTab] = useState(0);
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
+  const SectionTitle = ({ children, right }) => (
+    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+      <Typography variant="h6" sx={{ fontWeight: 800 }}>
+        {children}
+      </Typography>
+      <Box sx={{ ml: 'auto' }}>{right}</Box>
+    </Box>
   );
-}
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
-const AppInfoModal = ({ open, onClose }) => {
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   return (
-    <Modal
+    <Dialog
       open={open}
       onClose={onClose}
-      aria-labelledby="app-info-modal-title"
-      aria-describedby="app-info-modal-description"
+      fullWidth
+      maxWidth="md"
+      aria-labelledby="app-info-title"
     >
-      <Box sx={style}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography id="app-info-modal-title" variant="h6" component="h2">
-            Información de la Aplicación
+      <DialogTitle id="app-info-title" sx={{ pr: 7 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <InfoOutlinedIcon />
+          <Typography variant="h6" sx={{ fontWeight: 800 }}>
+            Información y Ayuda
           </Typography>
-          <IconButton onClick={onClose}>
-            <CloseIcon />
-          </IconButton>
+          <Box sx={{ ml: 'auto' }}>
+            <IconButton aria-label="Cerrar" onClick={onClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
         </Box>
-        <AppBar position="static" color="default" elevation={0} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label="App Info Tabs" variant="fullWidth">
-            <Tab label="Acerca de" {...a11yProps(0)} />
-            <Tab label="Características" {...a11yProps(1)} />
-            <Tab label="Tecnologías" {...a11yProps(2)} />
-          </Tabs>
-        </AppBar>
-        <TabPanel value={value} index={0}>
-          Esta aplicación es un sistema integral para la gestión de un chatbot, la integración con Moodle y un CRM. Su objetivo es optimizar la comunicación y la administración de estudiantes y cursos.
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <ul>
-            <li>Gestión de usuarios y roles.</li>
-            <li>Integración bidireccional con Moodle para cursos y calificaciones.</li>
-            <li>Funcionalidades de CRM para seguimiento de estudiantes.</li>
-            <li>Chatbot de WhatsApp con flujos de conversación personalizables.</li>
-            <li>Envío de notificaciones automáticas (calificaciones, ausencias, etc.).</li>
-            <li>Panel de control con KPIs y visualizaciones de datos.</li>
-          </ul>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <ul>
-            <li>Frontend: React, Material-UI, React Router.</li>
-            <li>Backend: FastAPI (Python), SQLAlchemy, PostgreSQL/MySQL.</li>
-            <li>Autenticación: JWT.</li>
-            <li>Integraciones: Moodle API, Twilio (para WhatsApp).</li>
-          </ul>
-        </TabPanel>
-      </Box>
-    </Modal>
-  );
-};
+      </DialogTitle>
 
-export default AppInfoModal;
+      <Divider />
+
+      <Box sx={{ px: 3, pt: 1 }}>
+        <Tabs
+          value={tab}
+          onChange={(_, v) => setTab(v)}
+          variant="scrollable"
+          allowScrollButtonsMobile
+        >
+          <Tab icon={<InfoOutlinedIcon />} iconPosition="start" label="General" />
+          <Tab icon={<InsightsOutlinedIcon />} iconPosition="start" label="Predictivo" />
+          <Tab icon={<FunctionsOutlinedIcon />} iconPosition="start" label="Fórmula (ELI5)" />
+          <Tab icon={<HelpOutlineIcon />} iconPosition="start" label="Cómo usarlo" />
+        </Tabs>
+      </Box>
+
+      <DialogContent dividers sx={{ pt: 2 }}>
+        {/* GENERAL */}
+        <TabPanel value={tab} index={0}>
+          <SectionTitle>¿Qué es esta aplicación?</SectionTitle>
+          <Typography paragraph>
+            Esta plataforma reúne la información académica (Moodle) y de gestión (CRM) en un solo
+            lugar. Te permite visualizar métricas, segmentar alumnos y tomar decisiones rápidas.
+          </Typography>
+          <Typography paragraph>
+            En particular, el módulo <strong>Dashboard Predictivo</strong> resalta alumnos que
+            podrían necesitar acompañamiento, combinando señales simples (reprobaciones y ausencias)
+            en un puntaje fácil de entender.
+          </Typography>
+          <Alert severity="info">
+            Todo lo que ves es explicable: no hay “caja negra”. Los pesos y el umbral se pueden
+            ajustar según la política de la institución.
+          </Alert>
+        </TabPanel>
+
+        {/* PREDICTIVO (QUÉ MUESTRA CADA GRÁFICO) */}
+        <TabPanel value={tab} index={1}>
+          <SectionTitle
+            right={
+              <Chip
+                size="small"
+                label="Umbral por defecto: min_score = 50"
+                sx={{
+                  bgcolor: theme.palette.mode === 'light'
+                    ? 'rgba(211,47,47,0.08)'
+                    : 'rgba(211,47,47,0.18)',
+                  color: 'error.main',
+                  fontWeight: 700,
+                }}
+              />
+            }
+          >
+            Dashboard Predictivo — ¿qué muestra?
+          </SectionTitle>
+
+          <Typography variant="subtitle1" sx={{ fontWeight: 700, mt: 1 }}>
+            1) Top cursos en riesgo
+          </Typography>
+          <Typography paragraph>
+            Barras con los cursos que tienen <strong>más alumnos en riesgo</strong>. Una barra más
+            larga significa más casos. Si hacés <em>clic</em> en una barra, se abre la
+            <strong> tabla de alumnos</strong> del curso con sus puntajes.
+          </Typography>
+
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            2) Alumnos en riesgo por mes
+          </Typography>
+          <Typography paragraph>
+            Línea que muestra la suma de alumnos en riesgo (de todos los cursos) por mes. La parte
+            punteada es una <strong>proyección simple</strong> (promedio de los últimos 3 meses).
+            Útil para ver si las acciones están bajando la curva.
+          </Typography>
+
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            3) Heatmap (mapa de calor)
+          </Typography>
+          <Typography paragraph>
+            Matriz con <em>filas = cursos</em> y <em>columnas = meses</em>. Cuanto más oscuro, más
+            alumnos en riesgo hubo en ese curso ese mes. Sirve para detectar <strong>picos</strong>
+            (por ejemplo, después de parciales).
+          </Typography>
+
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            4) Tabla de alumnos (drill-down)
+          </Typography>
+          <Typography paragraph>
+            Detalle de cada alumno del curso seleccionado: nombre, email,
+            <em>reprobaciones</em>, <em>ausencias</em>, último período, <em>puntaje de riesgo</em> y
+            un <em>bucket</em> (rótulo) que resume el patrón, por ejemplo:
+            <em> “reprobó 2 veces (mismo curso)”</em>.
+          </Typography>
+        </TabPanel>
+
+        {/* FÓRMULA ELI5 */}
+        <TabPanel value={tab} index={2}>
+          <SectionTitle>Fórmula de riesgo </SectionTitle>
+          <Typography paragraph>
+            Pensalo como una <strong>mochila de puntos de alerta</strong> que lleva cada alumno en
+            cada curso. Cuantos más puntos junta, más atención necesita.
+          </Typography>
+
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            ¿Cómo se suman los puntos?
+          </Typography>
+          <ul>
+            <li><strong>Aprobó</strong>: 0 puntos (todo bien)</li>
+            <li><strong>Reprobó</strong>: <strong>+35</strong> puntos</li>
+            <li><strong>Ausente</strong> (no hay nota): <strong>+25</strong> puntos</li>
+          </ul>
+          <Typography paragraph>
+            Si en el mismo curso hay <strong>reprobaciones y ausencias</strong>, sumamos
+            <strong> +10</strong> extra (es una combinación más preocupante).
+          </Typography>
+
+          <Typography
+            component="pre"
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              border: '1px dashed',
+              borderColor: 'divider',
+              bgcolor: theme.palette.mode === 'light' ? 'grey.50' : 'grey.900',
+              overflow: 'auto',
+              fontFamily: 'monospace',
+            }}
+          >
+{`Riesgo = (Reprobados × 35) + (Ausencias × 25) + (10 si hay ambas)
+El puntaje se "capa" en 100 (máximo). Si Riesgo ≥ min_score (por defecto 50) ⇒ "en riesgo".`}
+          </Typography>
+
+          <Typography variant="subtitle1" sx={{ fontWeight: 700, mt: 2 }}>
+            Ejemplos rápidos
+          </Typography>
+
+          <Table size="small" sx={{ mt: 1, mb: 2 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell align="right">Reprobados</TableCell>
+                <TableCell align="right">Ausencias</TableCell>
+                <TableCell>Cálculo</TableCell>
+                <TableCell align="right">Puntaje</TableCell>
+                <TableCell>¿En riesgo? (≥ 50)</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell align="right">1</TableCell>
+                <TableCell align="right">0</TableCell>
+                <TableCell>1×35</TableCell>
+                <TableCell align="right">35</TableCell>
+                <TableCell>❌ No</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="right">0</TableCell>
+                <TableCell align="right">2</TableCell>
+                <TableCell>2×25</TableCell>
+                <TableCell align="right">50</TableCell>
+                <TableCell>✅ Sí</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="right">1</TableCell>
+                <TableCell align="right">1</TableCell>
+                <TableCell>1×35 + 1×25 + 10</TableCell>
+                <TableCell align="right">70</TableCell>
+                <TableCell>✅ Sí</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="right">2</TableCell>
+                <TableCell align="right">0</TableCell>
+                <TableCell>2×35</TableCell>
+                <TableCell align="right">70</TableCell>
+                <TableCell>✅ Sí</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="right">3</TableCell>
+                <TableCell align="right">1</TableCell>
+                <TableCell>3×35 + 1×25 + 10 = 140 → tope 100</TableCell>
+                <TableCell align="right">100</TableCell>
+                <TableCell>✅ Sí</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+
+          <Alert severity="success">
+            <strong>Clave:</strong> reprobar pesa más que faltar, y tener ambas cosas juntas
+            dispara más la alerta. El umbral (<em>min_score</em>) se puede ajustar (por ejemplo 45 o 60).
+          </Alert>
+        </TabPanel>
+
+        {/* CÓMO USARLO */}
+        <TabPanel value={tab} index={3}>
+          <SectionTitle>Cómo usar el dashboard sin ser técnico</SectionTitle>
+          <ol>
+            <li>
+              <strong>Priorizar:</strong> mirá “Top cursos en riesgo” y empezá por los de arriba.
+            </li>
+            <li>
+              <strong>Actuar a tiempo:</strong> en la tabla del curso, contactá a quienes tienen
+              puntajes más altos (tutorías, recordatorios, acompañamiento).
+            </li>
+            <li>
+              <strong>Calendario inteligente:</strong> si el heatmap marca un mes crítico, reforzá
+              antes con consultorías o guías de estudio.
+            </li>
+            <li>
+              <strong>Medir impacto:</strong> verificá la línea mensual en las semanas siguientes;
+              si baja, tu intervención está funcionando.
+            </li>
+            <li>
+              <strong>Ajustar umbral:</strong> si ves demasiados o muy pocos casos, mové el{' '}
+              <em>min_score</em> y observá cómo cambian los gráficos.
+            </li>
+          </ol>
+          <Alert severity="info">
+            Todo el cálculo es trazable y auditable. Si querés, podemos ajustar los pesos o añadir
+            reglas específicas para tu institución.
+          </Alert>
+        </TabPanel>
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={onClose} variant="contained">Cerrar</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}

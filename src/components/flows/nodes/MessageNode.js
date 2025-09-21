@@ -1,10 +1,8 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 import { Box, Paper, TextField, Typography, Chip } from '@mui/material';
 
 const MessageNode = ({ data, id, selected }) => {
-  const [message, setMessage] = useState(data.label || '');
-
   const variables = [
     '{student_name}',
     '{course_name}',
@@ -13,18 +11,16 @@ const MessageNode = ({ data, id, selected }) => {
   ];
 
   const handleMessageChange = (event) => {
-    setMessage(event.target.value);
-    // We need to call a function from props to update the node data in the main component
+    console.log('handleMessageChange called', event.target.value);
     if (data.onChange) {
-      data.onChange(id, { ...data, label: event.target.value });
+      data.onChange(id, { label: event.target.value });
     }
   };
 
   const insertVariable = (variable) => {
-    const new_message = message + variable;
-    setMessage(new_message);
+    const newLabel = (data.label || '') + variable;
     if (data.onChange) {
-      data.onChange(id, { ...data, label: new_message });
+      data.onChange(id, { label: newLabel });
     }
   };
 
@@ -37,7 +33,7 @@ const MessageNode = ({ data, id, selected }) => {
           fullWidth
           multiline
           rows={4}
-          value={message}
+          value={data.label || ''}
           onChange={handleMessageChange}
           placeholder="Type your message here..."
         />
